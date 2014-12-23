@@ -93,6 +93,11 @@
     (bind-key "C-i"     'helm-execute-persistent-action helm-map)
     (bind-key "C-z"     'helm-select-action helm-map)))
 
+;;;_ , magit
+(use-package magit
+  :commands magit-status
+  :bind (("C-c g" . magit-status)))
+
 ;;;_ , org
 (use-package org
   :commands org-mode
@@ -161,15 +166,32 @@
  '(helm-M-x-fuzzy-match t)
  '(helm-buffers-fuzzy-matching t)
  '(inhibit-startup-screen t)
+ '(org-agenda-custom-commands
+   (quote
+    (("n" "Agenda and all TODOs"
+      ((agenda "" nil)
+       (alltodo "" nil))
+      nil)
+     ("u" "Agenda and all Unscheduled"
+      ((agenda "" nil)
+       (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
+      nil))))
  '(org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
+ '(org-agenda-ndays 7)
+ '(org-agenda-skip-scheduled-if-done t)
  '(org-capture-templates
    (quote
-    (("t" "Add new task" entry
-      (file "~/AeroFS/org/tasks.org")
+    (("n" "Add new note" entry
+      (file "~/AeroFS/org/notes.org")
+      "* %?
+  Added: %u")
+     ("t" "Add new task" entry
+      (file+headline "~/AeroFS/org/tasks.org" "Unscheduled")
       "* TODO %?
-  %u"))))
+  Added: %u"))))
  '(org-default-notes-file "~/AeroFS/org/notes.org")
  '(org-directory "~/AeroFS/org")
+ '(org-refile-use-cache t)
  '(org-reverse-note-order t)
  '(projectile-completion-system (quote helm))
  '(projectile-enable-caching t)
@@ -182,6 +204,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;;_. Terminal-specific
+
+(when (not (display-graphic-p))
+  ;; The solarized theme ends up in the customize variables; disable
+  ;; it here in case we're in that situation.
+  (disable-theme 'sanityinc-solarized-dark)
+  )
 
 ;;;_. Graphical-specific
 

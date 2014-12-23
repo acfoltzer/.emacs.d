@@ -57,7 +57,7 @@
     (use-package helm-config)
 
     ;; Override basic emacs commands
-    (bind-key "M-x"	'helm-M-x)
+    (bind-key "M-x"     'helm-M-x)
     (bind-key "C-x C-f" 'helm-find-files)
     (bind-key "C-x C-b" 'helm-buffers-list)
     (bind-key "C-x b"   'helm-mini)
@@ -67,7 +67,7 @@
       :commands helm-descbinds
       :init
       (fset 'describe-bindings 'helm-descbinds))
-    
+
     (bind-key "C-h b" 'helm-descbinds)
 
     (use-package helm-adaptive
@@ -79,9 +79,9 @@
     ;; after initializing
     (defun my-helm-init-hook ()
       (progn
-	(helm-mode)
-	(diminish 'helm-mode)))
-    
+        (helm-mode)
+        (diminish 'helm-mode)))
+
     (add-hook 'after-init-hook 'my-helm-init-hook)
     )
 
@@ -102,9 +102,9 @@
 (use-package org
   :commands org-mode
   :bind (("C-c a" . org-agenda)
-	 ("C-c b" . org-iswitchb)
-	 ("C-c c" . org-capture)
-	 ("C-c l" . org-store-link)))
+         ("C-c b" . org-iswitchb)
+         ("C-c c" . org-capture)
+         ("C-c l" . org-store-link)))
 
 ;;;_ , projectile
 (use-package projectile
@@ -114,7 +114,7 @@
   (progn
     (projectile-global-mode 1))
   :config
-  (progn    
+  (progn
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
 
 ;;;_ , recentf
@@ -156,6 +156,7 @@
  '(custom-safe-themes
    (quote
     ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+ '(global-whitespace-mode t)
  '(haskell-completing-read-function (quote helm--completing-read-default))
  '(haskell-mode-hook
    (quote
@@ -165,6 +166,8 @@
  '(haskell-process-type (quote cabal-repl))
  '(helm-M-x-fuzzy-match t)
  '(helm-buffers-fuzzy-matching t)
+ '(helm-command-prefix-key "C-x h")
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(org-agenda-custom-commands
    (quote
@@ -196,7 +199,10 @@
  '(projectile-completion-system (quote helm))
  '(projectile-enable-caching t)
  '(scroll-bar-mode nil)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(whitespace-style
+   (quote
+    (face tabs trailing lines space-before-tab newline empty space-after-tab tab-mark))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

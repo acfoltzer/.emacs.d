@@ -37,6 +37,10 @@
   :diminish allout-mode
   :commands allout-mode)
 
+;;;_ , exec-path-from-shell
+(use-package exec-path-from-shell
+  :init (exec-path-from-shell-initialize))
+
 ;;;_ , haskell-mode
 (use-package haskell-mode
   :commands haskell-mode
@@ -89,6 +93,14 @@
     (bind-key "C-i"     'helm-execute-persistent-action helm-map)
     (bind-key "C-z"     'helm-select-action helm-map)))
 
+;;;_ , org
+(use-package org
+  :commands org-mode
+  :bind (("C-c a" . org-agenda)
+	 ("C-c b" . org-iswitchb)
+	 ("C-c c" . org-capture)
+	 ("C-c l" . org-store-link)))
+
 ;;;_ , projectile
 (use-package projectile
   :commands projectile-global-mode
@@ -135,6 +147,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
  '(custom-safe-themes
    (quote
     ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
@@ -148,8 +161,19 @@
  '(helm-M-x-fuzzy-match t)
  '(helm-buffers-fuzzy-matching t)
  '(inhibit-startup-screen t)
+ '(org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
+ '(org-capture-templates
+   (quote
+    (("t" "Add new task" entry
+      (file "~/AeroFS/org/tasks.org")
+      "* TODO %?
+  %u"))))
+ '(org-default-notes-file "~/AeroFS/org/notes.org")
+ '(org-directory "~/AeroFS/org")
+ '(org-reverse-note-order t)
  '(projectile-completion-system (quote helm))
  '(projectile-enable-caching t)
+ '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
 
 (custom-set-faces

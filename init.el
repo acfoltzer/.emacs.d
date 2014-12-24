@@ -25,6 +25,14 @@
 
 (bind-key "C-z" 'collapse-or-expand)
 
+;;;_  . C-x ?
+
+;; I want to unlearn C-x o for switching windows
+(unbind-key "C-x o")
+
+;; I never want to kill a buffer that's not the current one
+(bind-key "C-x k" 'kill-this-buffer)
+
 ;;;_  . C-c ?
 
 (bind-key "C-c [" 'align-regexp)
@@ -46,6 +54,10 @@
   :commands haskell-mode
   :config
   (progn
+    (defun my-haskell-interactive-mode-hook ()
+      ;; disable trailing whitespace in interactive mode
+      (setq show-trailing-whitespace nil))
+    (add-hook 'haskell-interactive-mode-hook 'my-haskell-interactive-mode-hook)
     (when (executable-find "hasktags")
       (setq haskell-tags-on-save t))))
 
@@ -78,9 +90,8 @@
     ;; do the trick with helm-mode, so we just diminish it explicitly
     ;; after initializing
     (defun my-helm-init-hook ()
-      (progn
-        (helm-mode)
-        (diminish 'helm-mode)))
+      (helm-mode)
+      (diminish 'helm-mode))
 
     (add-hook 'after-init-hook 'my-helm-init-hook)
     )
@@ -104,7 +115,10 @@
   :bind (("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)
          ("C-c c" . org-capture)
-         ("C-c l" . org-store-link)))
+         ("C-c l" . org-store-link))
+  :init
+  (progn
+    (add-hook 'org-capture-mode-hook 'auto-fill-mode)))
 
 ;;;_ , projectile
 (use-package projectile
@@ -141,6 +155,18 @@
   :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
   :if (display-graphic-p))
 
+;;;_ , whitespace
+(use-package whitespace
+  :diminish (global-whitespace-mode
+             whitespace-mode
+             whitespace-newline-mode)
+  :commands (whitespace-buffer
+             whitespace-cleanup
+             whitespace-mode)
+  :init
+  (progn
+    (add-hook 'prog-mode-hook 'whitespace-mode)
+    ))
 
 ;;;_. Post-initialization
 
@@ -156,6 +182,7 @@
  '(custom-safe-themes
    (quote
     ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+ '(explicit-shell-file-name "/usr/local/bin/zsh")
  '(global-whitespace-mode t)
  '(haskell-completing-read-function (quote helm--completing-read-default))
  '(haskell-mode-hook
@@ -199,6 +226,8 @@
  '(projectile-completion-system (quote helm))
  '(projectile-enable-caching t)
  '(scroll-bar-mode nil)
+ '(show-trailing-whitespace t)
+ '(term-buffer-maximum-size 10000)
  '(tool-bar-mode nil)
  '(whitespace-style
    (quote

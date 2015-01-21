@@ -104,10 +104,23 @@
     (bind-key "C-i"     'helm-execute-persistent-action helm-map)
     (bind-key "C-z"     'helm-select-action helm-map)))
 
+;;;_ , idris-mode
+(use-package idris-mode)
+
 ;;;_ , magit
 (use-package magit
   :commands magit-status
   :bind (("C-c g" . magit-status)))
+
+;;;_ , multi-term
+(use-package multi-term
+  :bind (("C-. t" . multi-term-next)
+         ("C-. T" . multi-term))
+  :init
+  (progn
+    (defun my-term-mode-hook ()
+      (setq show-trailing-whitespace nil))
+    (add-hook 'term-mode-hook 'my-term-mode-hook)))
 
 ;;;_ , org
 (use-package org
@@ -181,7 +194,8 @@
  '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
  '(custom-safe-themes
    (quote
-    ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+    ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+ '(display-time-mode t)
  '(explicit-shell-file-name "/usr/local/bin/zsh")
  '(global-whitespace-mode t)
  '(haskell-completing-read-function (quote helm--completing-read-default))

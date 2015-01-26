@@ -156,6 +156,17 @@
   :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
   :if (display-graphic-p))
 
+;;;_ , structured-haskell-mode
+(use-package shm
+  :load-path "site-lisp/structured-haskell-mode/elisp"
+  :init
+  (progn
+    (setq shm-program-name
+          (expand-file-name
+            (concat (file-name-as-directory user-emacs-directory)
+                    "site-lisp/structured-haskell-mode/.cabal-sandbox/bin/structured-haskell-mode")))
+    (add-hook 'haskell-mode-hook 'structured-haskell-mode)))
+
 ;;;_ , whitespace
 (use-package whitespace
   :diminish (global-whitespace-mode
@@ -189,7 +200,7 @@
  '(haskell-completing-read-function (quote helm--completing-read-default))
  '(haskell-mode-hook
    (quote
-    (turn-on-haskell-doc turn-on-haskell-indentation interactive-haskell-mode)))
+    (turn-on-haskell-decl-scan turn-on-haskell-doc interactive-haskell-mode)))
  '(haskell-process-auto-import-loaded-modules t)
  '(haskell-process-log t)
  '(haskell-process-type (quote cabal-repl))

@@ -309,6 +309,9 @@
    ((find-font (font-spec :name "DejaVu Sans Mono"))
     (set-frame-font "DejaVu Sans Mono 14")))
 
+  ;; No accidental minimizing
+  (unbind-key "C-x C-z")
+
   ;; Fullscreen
   (toggle-frame-fullscreen)
   )

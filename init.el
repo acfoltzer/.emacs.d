@@ -1,8 +1,17 @@
 ;;;_. Initialization
 
-(require 'cask "~/.cask/cask.el")
-(cask-initialize)
+;;;_ , Get MELPA
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(package-initialize)
 
+;;;_ , Bootstrap use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
 
 ;;;_. Keybindings
@@ -33,12 +42,17 @@
   :diminish allout-mode
   :commands allout-mode)
 
+;;;_ , cryptol-mode
+(use-package cryptol-mode :ensure t)
+
 ;;;_ , exec-path-from-shell
 (use-package exec-path-from-shell
+  :ensure t
   :init (exec-path-from-shell-initialize))
 
 ;;;_ , haskell-mode
 (use-package haskell-mode
+  :ensure t
   :commands haskell-mode
   :config
   (progn
@@ -51,6 +65,7 @@
 
 ;;;_ , helm
 (use-package helm
+  :ensure t
   :commands helm-mode
   :init
   (progn
@@ -64,6 +79,7 @@
     (bind-key "M-y"     'helm-show-kill-ring)
 
     (use-package helm-descbinds
+      :ensure t
       :commands helm-descbinds
       :init
       (fset 'describe-bindings 'helm-descbinds))
@@ -82,6 +98,12 @@
       (diminish 'helm-mode))
 
     (add-hook 'after-init-hook 'my-helm-init-hook)
+
+    ;; Other helm packages
+    (use-package helm-ag :ensure t)
+    (use-package helm-idris :ensure t)
+    (use-package helm-projectile :ensure t)
+    (use-package helm-swoop :ensure t)
     )
 
   :config
@@ -93,15 +115,21 @@
     (bind-key "C-z"     'helm-select-action helm-map)))
 
 ;;;_ , idris-mode
-(use-package idris-mode)
+(use-package idris-mode
+  :ensure t)
 
 ;;;_ , magit
 (use-package magit
+  :ensure t
   :commands magit-status
   :bind (("C-c g" . magit-status)))
 
 ;;;_ , multi-term
 (use-package multi-term
+  :ensure t
+  :ensure t
+  :ensure t
+  :ensure t
   :bind (("C-. t" . multi-term-next)
          ("C-. T" . multi-term))
   :init
@@ -112,6 +140,7 @@
 
 ;;;_ , org
 (use-package org
+  :ensure t
   :commands org-mode
   :bind (("C-c a" . org-agenda)
          ("C-c b" . org-iswitchb)
@@ -123,6 +152,7 @@
 
 ;;;_ , projectile
 (use-package projectile
+  :ensure t
   :commands projectile-global-mode
   :diminish projectile-mode
   :init
@@ -153,6 +183,7 @@
 
 ;;;_ , solarized-theme
 (use-package color-theme-sanityinc-solarized
+  :ensure t
   :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
   :if (display-graphic-p))
 

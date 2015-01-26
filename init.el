@@ -180,6 +180,10 @@
     (add-hook 'prog-mode-hook 'whitespace-mode)
     ))
 
+;;;_ , windmove
+(use-package windmove
+  :init (windmove-default-keybindings))
+
 ;;;_. Post-initialization
 
 ;;;_. Customize

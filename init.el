@@ -11,19 +11,7 @@
 
 ;;;_  . C-?
 
-(defvar ctl-period-map)
-(define-prefix-command 'ctl-period-map)
-(bind-key "C-." 'ctl-period-map)
-
 (bind-key* "<C-return>" 'other-window)
-
-(defun collapse-or-expand ()
-  (interactive)
-  (if (> (length (window-list)) 1)
-      (delete-other-windows)
-      (bury-buffer)))
-
-(bind-key "C-z" 'collapse-or-expand)
 
 ;;;_  . C-x ?
 

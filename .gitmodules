@@ -1,0 +1,3 @@
+[submodule "site-lisp/structured-haskell-mode"]
+	path = site-lisp/structured-haskell-mode
+	url = https://github.com/chrisdone/structured-haskell-mode.git

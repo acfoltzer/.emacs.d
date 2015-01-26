@@ -14,6 +14,17 @@
   (package-install 'use-package))
 (require 'use-package)
 
+;;;_. Platform-specific
+
+;;;_ , OS X
+(when (eq system-type 'darwin)
+  (let ((ls-command (or (executable-find "gls")
+                        (executable-find "/opt/local/bin/gls")
+                        (executable-find "/usr/local/bin/gls"))))
+    (if (and ls-command (file-exists-p ls-command))
+        (setq insert-directory-program ls-command)
+      (message "Note: this Mac doesn't have an ls that supports --dired"))))
+
 ;;;_. Keybindings
 
 ;;;_ , global-map

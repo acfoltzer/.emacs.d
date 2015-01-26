@@ -124,20 +124,6 @@
   :commands magit-status
   :bind (("C-c g" . magit-status)))
 
-;;;_ , multi-term
-(use-package multi-term
-  :ensure t
-  :ensure t
-  :ensure t
-  :ensure t
-  :bind (("C-. t" . multi-term-next)
-         ("C-. T" . multi-term))
-  :init
-  (progn
-    (defun my-term-mode-hook ()
-      (setq show-trailing-whitespace nil))
-    (add-hook 'term-mode-hook 'my-term-mode-hook)))
-
 ;;;_ , org
 (use-package org
   :ensure t

@@ -279,7 +279,6 @@
  '(projectile-completion-system (quote helm))
  '(projectile-enable-caching t)
  '(scroll-bar-mode nil)
- '(show-trailing-whitespace t)
  '(term-buffer-maximum-size 10000)
  '(tool-bar-mode nil)
  '(whitespace-style

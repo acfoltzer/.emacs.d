@@ -142,6 +142,11 @@
   :commands magit-status
   :bind (("C-c g" . magit-status)))
 
+;;;_ , markdown-mode
+(use-package markdown-mode
+  :ensure t
+  :commands markdown-mode)
+
 ;;;_ , org
 (use-package org
   :ensure t

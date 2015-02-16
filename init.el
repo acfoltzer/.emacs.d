@@ -61,16 +61,23 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
+;;;_ , flycheck-haskell
+(use-package flycheck-haskell :ensure t)
+
 ;;;_ , haskell-mode
 (use-package haskell-mode
   :ensure t
   :commands haskell-mode
   :config
   (progn
-    (defun my-haskell-interactive-mode-hook ()
-      ;; disable trailing whitespace in interactive mode
-      (setq show-trailing-whitespace nil))
-    (add-hook 'haskell-interactive-mode-hook 'my-haskell-interactive-mode-hook)
+    (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
+    ;; XXX: waiting on https://github.com/chrisdone/ghci-ng/issues/10
+    ;; use ghci-ng repl if it's available
+    ;; (when (executable-find "ghci-ng")
+    ;;   (setq haskell-process-args-cabal-repl
+    ;;         '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng")))
+
+    ;; only run this if hasktags is available on the system
     (when (executable-find "hasktags")
       (setq haskell-tags-on-save t))))
 
@@ -193,7 +200,8 @@
           (expand-file-name
             (concat (file-name-as-directory user-emacs-directory)
                     "site-lisp/structured-haskell-mode/.cabal-sandbox/bin/structured-haskell-mode")))
-    (add-hook 'haskell-mode-hook 'structured-haskell-mode)))
+    (when (executable-find shm-program-name)
+      (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
 
 ;;;_ , whitespace
 (use-package whitespace

@@ -104,16 +104,15 @@
 
     (bind-key "C-h b" 'helm-descbinds)
 
-    (use-package helm-adaptive
-      :init
-      (helm-adaptive-mode t))
+    (use-package helm-adaptive)
 
     ;; For some reason, the :diminish feature of use-package doesn't
     ;; do the trick with helm-mode, so we just diminish it explicitly
     ;; after initializing
     (defun my-helm-init-hook ()
       (helm-mode)
-      (diminish 'helm-mode))
+      (diminish 'helm-mode)
+      (helm-adaptive-mode t))
 
     (add-hook 'after-init-hook 'my-helm-init-hook)
 
@@ -140,7 +139,10 @@
 (use-package magit
   :ensure t
   :commands magit-status
-  :bind (("C-c g" . magit-status)))
+  :bind (("C-c g" . magit-status))
+  :config
+  (progn
+    (setq magit-last-seen-setup-instructions "1.4.0")))
 
 ;;;_ , markdown-mode
 (use-package markdown-mode
@@ -240,7 +242,7 @@
    (quote
     ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
  '(display-time-mode t)
- '(explicit-shell-file-name "/usr/local/bin/zsh")
+ '(explicit-shell-file-name "/usr/bin/zsh")
  '(global-whitespace-mode t)
  '(haskell-completing-read-function (quote helm--completing-read-default))
  '(haskell-mode-hook

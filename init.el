@@ -53,6 +53,11 @@
   :diminish allout-mode
   :commands allout-mode)
 
+;;;_ , AUCTeX
+(use-package tex-site
+  :ensure auctex
+  :init (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+
 ;;;_ , cryptol-mode
 (use-package cryptol-mode :ensure t)
 

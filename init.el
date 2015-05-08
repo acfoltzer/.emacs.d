@@ -56,7 +56,12 @@
 ;;;_ , AUCTeX
 (use-package tex-site
   :ensure auctex
-  :init (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+  :config (add-hook 'LaTeX-mode-hook 'turn-on-reftex))
+
+;;;_ , auctex-latexmk
+(use-package auctex-latexmk
+  :ensure t
+  :config (auctex-latexmk-setup))
 
 ;;;_ , cryptol-mode
 (use-package cryptol-mode :ensure t)
@@ -328,8 +333,8 @@
   ;; No accidental minimizing
   (unbind-key "C-x C-z")
 
-  ;; Fullscreen
-  (toggle-frame-fullscreen)
+  ;; Fullscreen (disabled for now, it gets annoying)
+  ;; (toggle-frame-fullscreen)
   )
 
 ;; Local Variables:

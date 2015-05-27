@@ -220,6 +220,11 @@
     (when (executable-find shm-program-name)
       (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
 
+;;;_ , unicode-fonts
+(use-package unicode-fonts
+  :ensure t
+  :init (unicode-fonts-setup))
+
 ;;;_ , whitespace
 (use-package whitespace
   :diminish (global-whitespace-mode

@@ -246,6 +246,13 @@
 
 ;;;_. Customize
 
+;; Slowly replacing this section with manual setqs to avoid version
+;; control headaches.
+
+;; Don't prompt to reload TAGS file when it changes. This makes
+;; haskell-mode far less annoying
+(setq tags-revert-without-query t)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -178,7 +178,8 @@
   :diminish projectile-mode
   :init
   (progn
-    (projectile-global-mode 1))
+    (projectile-global-mode 1)
+    (setq projectile-completion-system 'helm))
   :config
   (progn
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))

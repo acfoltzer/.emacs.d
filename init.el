@@ -81,12 +81,6 @@
   :config
   (progn
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-    ;; XXX: waiting on https://github.com/chrisdone/ghci-ng/issues/10
-    ;; use ghci-ng repl if it's available
-    ;; (when (executable-find "ghci-ng")
-    ;;   (setq haskell-process-args-cabal-repl
-    ;;         '("--ghc-option=-ferror-spans" "--with-ghc=ghci-ng")))
-
     ;; only run this if hasktags is available on the system
     (when (executable-find "hasktags")
       (setq haskell-tags-on-save t))))
@@ -203,6 +197,13 @@
 
     (add-hook 'dired-mode-hook 'recentf-add-dired-directory)))
 
+;;;_ , smart-tabs
+(use-package smart-tabs-mode
+  :ensure t
+  :init
+  (progn
+    (smart-tabs-insinuate 'c)))
+
 ;;;_ , solarized-theme
 (use-package color-theme-sanityinc-solarized
   :ensure t
@@ -250,8 +251,9 @@
 ;; Slowly replacing this section with manual setqs to avoid version
 ;; control headaches.
 
-;; Don't prompt to reload TAGS file when it changes. This makes
-;; haskell-mode far less annoying
+;; Don't prompt to reload TAGS file when it changes, and always reload
+;; when we change directories. This makes haskell-mode far less
+;; annoying
 (setq tags-revert-without-query t)
 
 (custom-set-variables
@@ -290,6 +292,12 @@
        (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
       nil))))
  '(org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
+(setq tags-add-tables nil)
+
+;; Never indent with tabs for align-regexp
+(defadvice align-regexp (around align-regexp-with-spaces activate)
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
  '(org-agenda-ndays 7)
  '(org-agenda-skip-scheduled-if-done t)
  '(org-capture-templates

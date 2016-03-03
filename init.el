@@ -178,6 +178,40 @@
   (progn
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
 
+;;;_ , python
+(use-package python-mode
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :config
+  (defvar python-mode-initialized nil)
+
+  (defun my-python-mode-hook ()
+    (unless python-mode-initialized
+      (setq python-mode-initialized t)
+
+      (info-lookup-add-help
+       :mode 'python-mode
+       :regexp "[a-zA-Z_0-9.]+"
+       :doc-spec
+       '(("(python)Python Module Index" )
+         ("(python)Index"
+          (lambda
+            (item)
+            (cond
+             ((string-match
+               "\\([A-Za-z0-9_]+\\)() (in module \\([A-Za-z0-9_.]+\\))" item)
+              (format "%s.%s" (match-string 2 item)
+                      (match-string 1 item)))))))))
+
+    (setq indicate-empty-lines t)
+    (set (make-local-variable 'parens-require-spaces) nil)
+    (setq indent-tabs-mode nil)
+
+    (bind-key "C-c C-z" #'python-shell python-mode-map)
+    (unbind-key "C-c c" python-mode-map))
+
+  (add-hook 'python-mode-hook 'my-python-mode-hook))
+
 ;;;_ , recentf
 (use-package recentf
   :if (not noninteractive)
@@ -261,6 +295,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+;;;_ , virtualenvwrapper
+(use-package virtualenvwrapper :ensure t)
+
  '(column-number-mode t)
  '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
  '(custom-safe-themes

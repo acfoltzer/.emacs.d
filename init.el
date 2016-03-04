@@ -9,10 +9,14 @@
 (package-initialize)
 
 ;;;_ , Bootstrap use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(require 'use-package)
+(eval-when-compile
+  (progn
+    (unless (package-installed-p 'use-package)
+      (package-refresh-contents)
+      (package-install 'use-package))
+    (require 'use-package)))
+(require 'diminish)
+(require 'bind-key)
 
 ;;;_. Platform-specific
 
@@ -40,6 +44,9 @@
 
 ;; I never want to kill a buffer that's not the current one
 (bind-key "C-x k" 'kill-this-buffer)
+
+;; Unbind for helm prefix later
+(unbind-key "C-x h")
 
 ;;;_  . C-c ?
 
@@ -81,7 +88,22 @@
   :config
   (progn
     (add-hook 'haskell-mode-hook 'haskell-indentation-mode)
-    ;; only run this if hasktags is available on the system
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
+    (setq haskell-completing-read-function
+          '(helm--completing-read-default))
+    (setq haskell-process-args-cabal-repl
+          '("--ghc-options=-fobject-code" "--ghc-options=-ferror-spans"))
+    (setq haskell-process-auto-import-loaded-modules t)
+    (setq haskell-process-log t)
+    (setq haskell-process-reload-with-fbytecode t)
+    (setq haskell-process-suggest-add-package nil)
+
+    ;; automatically choose cabal repl, stack ghci, etc
+    (setq haskell-process-type 'auto)
+
+    ;; only run hasktags if it's available on the system
     (when (executable-find "hasktags")
       (setq haskell-tags-on-save t))))
 
@@ -91,6 +113,11 @@
   :commands helm-mode
   :init
   (progn
+    ;; Configuration
+    (setq helm-command-prefix-key "C-x h")
+    (setq helm-M-x-fuzzy-match t)
+    (setq helm-buffers-fuzzy-matching t)
+
     (use-package helm-config)
 
     ;; Override basic emacs commands
@@ -124,8 +151,7 @@
     (use-package helm-ag :ensure t)
     (use-package helm-idris :ensure t)
     (use-package helm-projectile :ensure t)
-    (use-package helm-swoop :ensure t)
-    )
+    (use-package helm-swoop :ensure t))
 
   :config
   (progn
@@ -134,6 +160,7 @@
     (bind-key "<tab>"   'helm-execute-persistent-action helm-map)
     (bind-key "C-i"     'helm-execute-persistent-action helm-map)
     (bind-key "C-z"     'helm-select-action helm-map)))
+
 
 ;;;_ , idris-mode
 (use-package idris-mode
@@ -163,7 +190,34 @@
          ("C-c l" . org-store-link))
   :init
   (progn
-    (add-hook 'org-capture-mode-hook 'auto-fill-mode)))
+    (add-hook 'org-capture-mode-hook 'auto-fill-mode)
+    (setq org-agenda-custom-commands
+          '(("n" "Agenda and all TODOs"
+             ((agenda "" nil)
+              (alltodo "" nil))
+             nil)
+            ("u" "Agenda and all Unscheduled"
+             ((agenda "" nil)
+              (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
+             nil)))
+    (setq org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
+    (setq org-agenda-ndays 7)
+    (setq org-agenda-skip-scheduled-if-done t)
+    (setq org-capture-templates
+          (quote
+           (("n" "Add new note" entry
+             (file "~/AeroFS/org/notes.org")
+             "* %?
+  Added: %u")
+            ("t" "Add new task" entry
+             (file+headline "~/AeroFS/org/tasks.org" "Unscheduled")
+             "* TODO %?
+  Added: %u"))))
+    (setq org-default-notes-file "~/AeroFS/org/notes.org")
+    (setq org-directory "~/AeroFS/org")
+    (setq org-refile-use-cache t)
+    (setq org-reverse-note-order t)))
+
 
 ;;;_ , projectile
 (use-package projectile
@@ -173,7 +227,9 @@
   :init
   (progn
     (projectile-global-mode 1)
-    (setq projectile-completion-system 'helm))
+    (setq projectile-completion-system 'helm)
+    (setq projectile-enable-caching t))
+
   :config
   (progn
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
@@ -231,6 +287,12 @@
 
     (add-hook 'dired-mode-hook 'recentf-add-dired-directory)))
 
+;;;_ , scheme
+(use-package scheme
+  :init
+  (progn
+    (setq scheme-program-name "petite")))
+
 ;;;_ , smart-tabs
 (use-package smart-tabs-mode
   :ensure t
@@ -242,7 +304,13 @@
 (use-package color-theme-sanityinc-solarized
   :ensure t
   :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
-  :if (display-graphic-p))
+  :if (display-graphic-p)
+  :init
+  (progn
+    (setq custom-enabled-themes '(sanityinc-solarized-dark))
+    (setq custom-safe-themes
+          '("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
+            default))))
 
 ;;;_ , structured-haskell-mode
 (use-package shm
@@ -261,6 +329,9 @@
   :ensure t
   :init (unicode-fonts-setup))
 
+;;;_ , virtualenvwrapper
+(use-package virtualenvwrapper :ensure t)
+
 ;;;_ , whitespace
 (use-package whitespace
   :diminish (global-whitespace-mode
@@ -272,7 +343,9 @@
   :init
   (progn
     (add-hook 'prog-mode-hook 'whitespace-mode)
-    ))
+    (setq whitespace-style
+          '(face tabs trailing lines space-before-tab
+            newline empty space-after-tab tab-mark))))
 
 ;;;_ , windmove
 (use-package windmove
@@ -282,90 +355,34 @@
 
 ;;;_. Customize
 
-;; Slowly replacing this section with manual setqs to avoid version
-;; control headaches.
+;;;_ , Mode line
+(column-number-mode 1)
+(display-time-mode 1)
+
+;; No startup screen
+(setq inhibit-startup-screen t)
 
 ;; Don't prompt to reload TAGS file when it changes, and always reload
 ;; when we change directories. This makes haskell-mode far less
 ;; annoying
 (setq tags-revert-without-query t)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
-;;;_ , virtualenvwrapper
-(use-package virtualenvwrapper :ensure t)
-
- '(column-number-mode t)
- '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
- '(custom-safe-themes
-   (quote
-    ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
- '(display-time-mode t)
- '(explicit-shell-file-name "/usr/bin/zsh")
- '(global-whitespace-mode t)
- '(haskell-completing-read-function (quote helm--completing-read-default))
- '(haskell-mode-hook
-   (quote
-    (turn-on-haskell-decl-scan turn-on-haskell-doc interactive-haskell-mode)))
- '(haskell-process-auto-import-loaded-modules t)
- '(haskell-process-log t)
- '(haskell-process-type (quote cabal-repl))
- '(helm-M-x-fuzzy-match t)
- '(helm-buffers-fuzzy-matching t)
- '(helm-command-prefix-key "C-x h")
- '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
- '(org-agenda-custom-commands
-   (quote
-    (("n" "Agenda and all TODOs"
-      ((agenda "" nil)
-       (alltodo "" nil))
-      nil)
-     ("u" "Agenda and all Unscheduled"
-      ((agenda "" nil)
-       (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
-      nil))))
- '(org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
 (setq tags-add-tables nil)
 
-;; Never indent with tabs for align-regexp
+;; No indenting with tabs by default
+(setq indent-tabs-mode nil)
+
+;; Never indent with tabs for align-regexp, even for tab-sensitive
+;; modes like Makefiles
 (defadvice align-regexp (around align-regexp-with-spaces activate)
   (let ((indent-tabs-mode nil))
     ad-do-it))
- '(org-agenda-ndays 7)
- '(org-agenda-skip-scheduled-if-done t)
- '(org-capture-templates
-   (quote
-    (("n" "Add new note" entry
-      (file "~/AeroFS/org/notes.org")
-      "* %?
-  Added: %u")
-     ("t" "Add new task" entry
-      (file+headline "~/AeroFS/org/tasks.org" "Unscheduled")
-      "* TODO %?
-  Added: %u"))))
- '(org-default-notes-file "~/AeroFS/org/notes.org")
- '(org-directory "~/AeroFS/org")
- '(org-refile-use-cache t)
- '(org-reverse-note-order t)
- '(projectile-completion-system (quote helm))
- '(projectile-enable-caching t)
- '(scroll-bar-mode nil)
- '(term-buffer-maximum-size 10000)
- '(tool-bar-mode nil)
- '(whitespace-style
-   (quote
-    (face tabs trailing lines space-before-tab newline empty space-after-tab tab-mark))))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;;_. Local configuration
+
+;; Anything specific to a machine should be in site-lisp/local-config
+;; so it's not checked in, but don't fail if it's not present.
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(require 'local-config nil t)
 
 ;;;_. Terminal-specific
 
@@ -378,7 +395,11 @@
 ;;;_. Graphical-specific
 
 (when (display-graphic-p)
-  ;; Terminal emacs just inherits from a Solarized terminal emulator
+  ;; No useless toolbar
+  (tool-bar-mode -1)
+  ;; No scrollbar
+  (scroll-bar-mode nil)
+
   (color-theme-sanityinc-solarized-dark)
 
   ;; Embiggening again is handled by the terminal when non-graphical

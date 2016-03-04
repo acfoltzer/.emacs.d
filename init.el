@@ -398,7 +398,7 @@
   ;; No useless toolbar
   (tool-bar-mode -1)
   ;; No scrollbar
-  (scroll-bar-mode nil)
+  (scroll-bar-mode -1)
 
   (color-theme-sanityinc-solarized-dark)
 

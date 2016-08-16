@@ -309,20 +309,21 @@
   (progn
     (setq custom-enabled-themes '(sanityinc-solarized-dark))
     (setq custom-safe-themes
-          '("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
-            default))))
+	  '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
+	    "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
+	    default))))
 
 ;;;_ , structured-haskell-mode
-(use-package shm
-  :load-path "site-lisp/structured-haskell-mode/elisp"
-  :init
-  (progn
-    (setq shm-program-name
-          (expand-file-name
-            (concat (file-name-as-directory user-emacs-directory)
-                    "site-lisp/structured-haskell-mode/.cabal-sandbox/bin/structured-haskell-mode")))
-    (when (executable-find shm-program-name)
-      (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
+;; (use-package shm
+;;   :load-path "site-lisp/structured-haskell-mode/elisp"
+;;   :init
+;;   (progn
+;;     (setq shm-program-name
+;;           (expand-file-name
+;;             (concat (file-name-as-directory user-emacs-directory)
+;;                     "site-lisp/structured-haskell-mode/.cabal-sandbox/bin/structured-haskell-mode")))
+;;     (when (executable-find shm-program-name)
+;;       (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
 
 ;;;_ , unicode-fonts
 (use-package unicode-fonts

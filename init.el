@@ -200,21 +200,21 @@
              ((agenda "" nil)
               (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
              nil)))
-    (setq org-agenda-files (quote ("~/AeroFS/org/tasks.org")))
+    (setq org-agenda-files (quote ("~/Dropbox/org/tasks.org")))
     (setq org-agenda-ndays 7)
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-capture-templates
           (quote
            (("n" "Add new note" entry
-             (file "~/AeroFS/org/notes.org")
+             (file "~/Dropbox/org/notes.org")
              "* %?
   Added: %u")
             ("t" "Add new task" entry
-             (file+headline "~/AeroFS/org/tasks.org" "Unscheduled")
+             (file+headline "~/Dropbox/org/tasks.org" "Unscheduled")
              "* TODO %?
   Added: %u"))))
-    (setq org-default-notes-file "~/AeroFS/org/notes.org")
-    (setq org-directory "~/AeroFS/org")
+    (setq org-default-notes-file "~/Dropbox/org/notes.org")
+    (setq org-directory "~/Dropbox/org")
     (setq org-refile-use-cache t)
     (setq org-reverse-note-order t)))
 

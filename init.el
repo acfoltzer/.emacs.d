@@ -378,6 +378,13 @@
   (let ((indent-tabs-mode nil))
     ad-do-it))
 
+;; Configure some C-mode indenting that will percolate to inherited
+;; modes
+(c-set-offset 'inextern-lang 0 t)
+(c-set-offset 'innamespace 0 t)
+(c-set-offset 'namespace-open  0 t)
+(c-set-offset 'namespace-close 0 t)
+
 ;;;_. Local configuration
 
 ;; Anything specific to a machine should be in site-lisp/local-config

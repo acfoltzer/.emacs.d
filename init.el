@@ -73,6 +73,9 @@
 ;;;_ , cryptol-mode
 (use-package cryptol-mode :ensure t)
 
+;;;_ , elm-mode
+(use-package elm-mode :ensure t)
+
 ;;;_ , exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t
@@ -91,8 +94,6 @@
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
     (add-hook 'haskell-mode-hook 'turn-on-haskell-decl-scan)
     (add-hook 'haskell-mode-hook 'turn-on-haskell-doc)
-    (setq haskell-completing-read-function
-          '(helm--completing-read-default))
     (setq haskell-process-args-cabal-repl
           '("--ghc-options=-fobject-code" "--ghc-options=-ferror-spans"))
     (setq haskell-process-auto-import-loaded-modules t)
@@ -233,6 +234,13 @@
   :config
   (progn
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
+
+;;;_ , purescript
+(use-package purescript-mode
+  :ensure t
+  :init
+  (progn
+    (add-hook 'purescript-mode-hook '(turn-on-purescript-indentation))))
 
 ;;;_ , python
 (use-package python-mode
@@ -384,6 +392,9 @@
 (c-set-offset 'innamespace 0 t)
 (c-set-offset 'namespace-open  0 t)
 (c-set-offset 'namespace-close 0 t)
+
+;; Don't split horizontally when making new windows
+(setq split-height-threshold 9999)
 
 ;;;_. Local configuration
 

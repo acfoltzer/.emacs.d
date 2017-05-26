@@ -181,6 +181,11 @@
   :ensure t
   :commands markdown-mode)
 
+;;;_ , meson-mode
+(use-package meson-mode
+  :ensure t
+  :commands meson-mode)
+
 ;;;_ , org
 (use-package org
   :ensure t
@@ -396,6 +401,9 @@
 ;; Don't split horizontally when making new windows
 (setq split-height-threshold 9999)
 
+;; Automatically save desktop
+(desktop-save-mode 1)
+
 ;;;_. Local configuration
 
 ;; Anything specific to a machine should be in site-lisp/local-config
@@ -414,8 +422,9 @@
 ;;;_. Graphical-specific
 
 (when (display-graphic-p)
-  ;; No useless toolbar
+  ;; No useless toolbar or menu bar
   (tool-bar-mode -1)
+  (menu-bar-mode -1)
   ;; No scrollbar
   (scroll-bar-mode -1)
 
@@ -430,9 +439,6 @@
 
   ;; No accidental minimizing
   (unbind-key "C-x C-z")
-
-  ;; Fullscreen (disabled for now, it gets annoying)
-  ;; (toggle-frame-fullscreen)
   )
 
 ;; Local Variables:

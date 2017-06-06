@@ -300,6 +300,11 @@
 
     (add-hook 'dired-mode-hook 'recentf-add-dired-directory)))
 
+;;;_ , rust
+(use-package rust-mode
+  :ensure t
+  :commands rust-mode)
+
 ;;;_ , scheme
 (use-package scheme
   :init

@@ -330,12 +330,12 @@
   (progn
     (setq scheme-program-name "petite")))
 
-;;;_ , smart-tabs
-(use-package smart-tabs-mode
-  :ensure t
-  :init
-  (progn
-    (smart-tabs-insinuate 'c)))
+;; ;;;_ , smart-tabs
+;; (use-package smart-tabs-mode
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (smart-tabs-insinuate 'c)))
 
 ;;;_ , solarized-theme
 (use-package color-theme-sanityinc-solarized
@@ -407,7 +407,7 @@
 (setq tags-add-tables nil)
 
 ;; No indenting with tabs by default
-(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 ;; Never indent with tabs for align-regexp, even for tab-sensitive
 ;; modes like Makefiles
@@ -423,7 +423,7 @@
 (c-set-offset 'namespace-close 0 t)
 
 ;; Don't split horizontally when making new windows
-(setq split-height-threshold 9999)
+(setq split-width-threshold 9999)
 
 ;; Automatically save desktop
 (desktop-save-mode 1)

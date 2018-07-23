@@ -392,6 +392,9 @@
 (use-package windmove
   :init (windmove-default-keybindings))
 
+;;;_ , yaml
+(use-package yaml-mode :ensure t)
+
 ;;;_. Post-initialization
 
 ;;;_. Customize

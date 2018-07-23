@@ -183,6 +183,7 @@
   :config
   (progn
     (setq magit-last-seen-setup-instructions "1.4.0")))
+(use-package magit-todos :ensure t)
 
 ;;;_ , markdown-mode
 (use-package markdown-mode

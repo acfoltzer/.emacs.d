@@ -17,7 +17,7 @@
       (package-refresh-contents)
       (package-install 'use-package))
     (require 'use-package)))
-(require 'diminish)
+(use-package diminish :ensure t)
 (require 'bind-key)
 
 ;;;_. Platform-specific

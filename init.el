@@ -110,7 +110,7 @@
     (setq haskell-process-suggest-add-package nil)
 
     ;; automatically choose cabal repl, stack ghci, etc
-    (setq haskell-process-type 'auto)
+    (setq haskell-process-type 'cabal-new-repl)
 
     ;; only run hasktags if it's available on the system
     (when (executable-find "hasktags")

@@ -74,19 +74,30 @@
 
 ;;;_ , c-mode
 (defun my-c-initialization-hook ()
-  (bind-key "C-c C-f" 'clang-format-buffer c-mode-map)
-  (c-toggle-comment-style -1))
+  (bind-key "C-c C-f" 'clang-format-buffer c-mode-map))
 (add-hook 'c-initialization-hook 'my-c-initialization-hook)
 
+;;;_ , cargo
+(use-package cargo
+  :hook (rust-mode . cargo-minor-mode)
+  :diminish)
 
 ;;;_ , company
 (use-package company
   :ensure t
+  :demand
   :diminish company-mode
   :commands company-mode)
 
 ;;;_ , cryptol-mode
 (use-package cryptol-mode :ensure t)
+
+;;;_ , editorconfig-mode
+(use-package editorconfig
+  :ensure t
+  :diminish editorconfig-mode
+  :config
+  (editorconfig-mode 1))
 
 ;;;_ , elm-mode
 (use-package elm-mode :ensure t)
@@ -182,6 +193,16 @@
 (use-package idris-mode
   :ensure t)
 
+;;;_ , lsp
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :config (require 'lsp-clients))
+
+(use-package lsp-ui
+  :ensure t
+  :hook (lsp-mode . lsp-ui-mode))
+
 ;;;_ , magit
 (use-package magit
   :ensure t
@@ -253,6 +274,15 @@
     (setq projectile-enable-caching t))
 
   :config
+  ;; Invalidate projectile cache when checking out a new branch
+  (defun run-projectile-invalidate-cache (&rest _args)
+    ;; We ignore the args to `magit-checkout'.
+    (projectile-invalidate-cache nil))
+  (advice-add 'magit-checkout
+              :after #'run-projectile-invalidate-cache)
+  (advice-add 'magit-branch-and-checkout ; This is `b c'.
+              :after #'run-projectile-invalidate-cache)
+
   (progn
     (bind-key "C-c p" 'projectile-command-map projectile-mode-map)
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
@@ -322,12 +352,10 @@
   :ensure t
   :commands rust-mode)
 
-(use-package cargo
-  :ensure t)
-
 (use-package racer
   :ensure t
-  :bind (("TAB" . company-indent-or-complete-common))
+  :diminish
+  :bind (:map company-mode-map ("TAB" . company-indent-or-complete-common))
   :init
   (progn
     (add-hook 'rust-mode-hook #'racer-mode)
@@ -373,6 +401,8 @@
 ;;     (when (executable-find shm-program-name)
 ;;       (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
 
+(use-package tramp :ensure t)
+
 ;;;_ , unicode-fonts
 (use-package unicode-fonts
   :ensure t
@@ -403,6 +433,9 @@
 
 ;;;_ , yaml
 (use-package yaml-mode :ensure t)
+
+;;;_ , yasnippet
+(use-package yasnippet :ensure t)
 
 ;;;_. Post-initialization
 
@@ -448,6 +481,9 @@
 
 ;; no more yes-or-no
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; stop asking about loading files unless they're 1GB or bigger
+(setq large-file-warning-threshold (* 1024 1024 1024))
 
 ;;;_. Local configuration
 
@@ -496,16 +532,28 @@
  '(ansi-color-names-vector
    (vector "#839496" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"))
  '(beacon-color "#dc322f")
+ '(cryptol-command "/opt/cryptol/bin/cryptol")
  '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
  '(custom-safe-themes
    (quote
     ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
  '(fci-rule-color "#073642")
  '(frame-background-mode (quote dark))
+ '(lsp-prefer-flymake nil)
  '(magit-commit-arguments (quote ("--gpg-sign=2A91B421C62B535C")))
  '(package-selected-packages
    (quote
-    (dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package)))
+    (eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package)))
+ '(safe-local-variable-values
+   (quote
+    ((eval c-set-offset
+           (quote innamespace)
+           0)
+     (eval when
+           (fboundp
+            (quote c-toggle-comment-style))
+           (c-toggle-comment-style 1)))))
+ '(saw-script-command "/opt/saw/bin/saw")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    (quote
@@ -534,7 +582,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
- ;; Local Variables:
+
+;; Local Variables:
 ;;   mode: emacs-lisp
 ;;   mode: allout
 ;;   outline-regexp: "^;;;_\\([,. ]+\\)"

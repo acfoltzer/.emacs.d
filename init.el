@@ -102,6 +102,14 @@
 ;;;_ , elm-mode
 (use-package elm-mode :ensure t)
 
+;;;_ , emojify-mode
+(use-package emojify
+  :ensure t
+  :config
+  (progn
+    (global-emojify-mode)
+    (global-emojify-mode-line-mode)))
+
 ;;;_ , exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t
@@ -197,7 +205,9 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :config (require 'lsp-clients))
+  :hook ((rust-mode) . lsp)
+  :bind (:map lsp-command-map
+              ("C-S-l" . lsp-keymap-prefix)))
 
 (use-package lsp-ui
   :ensure t
@@ -243,21 +253,21 @@
              ((agenda "" nil)
               (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
              nil)))
-    (setq org-agenda-files (quote ("~/Dropbox/org/tasks.org")))
+    (setq org-agenda-files (quote ("~/acfoltzer@fastly.com/org/tasks.org.txt")))
     (setq org-agenda-ndays 7)
     (setq org-agenda-skip-scheduled-if-done t)
     (setq org-capture-templates
           (quote
            (("n" "Add new note" entry
-             (file "~/Dropbox/org/notes.org")
+             (file "~/acfoltzer@fastly.com/org/notes.org.txt")
              "* %?
   Added: %u")
             ("t" "Add new task" entry
-             (file+headline "~/Dropbox/org/tasks.org" "Unscheduled")
+             (file+headline "~/acfoltzer@fastly.com/org/tasks.org.txt" "Unscheduled")
              "* TODO %?
   Added: %u"))))
-    (setq org-default-notes-file "~/Dropbox/org/notes.org")
-    (setq org-directory "~/Dropbox/org")
+    (setq org-default-notes-file "~/acfoltzer@fastly.com/org/notes.org.txt")
+    (setq org-directory "~/acfoltzer@fastly.com/org")
     (setq org-refile-use-cache t)
     (setq org-reverse-note-order t)))
 
@@ -358,7 +368,7 @@
   :bind (:map company-mode-map ("TAB" . company-indent-or-complete-common))
   :init
   (progn
-    (add-hook 'rust-mode-hook #'racer-mode)
+    ;; (add-hook 'rust-mode-hook #'racer-mode)
     (add-hook 'racer-mode-hook #'eldoc-mode)
     (add-hook 'racer-mode-hook #'company-mode)
     (setq company-tooltip-align-annotations t)))
@@ -435,7 +445,9 @@
 (use-package yaml-mode :ensure t)
 
 ;;;_ , yasnippet
-(use-package yasnippet :ensure t)
+(use-package yasnippet
+  :ensure t
+  :hook ((rust-mode) . yas-minor-mode))
 
 ;;;_. Post-initialization
 
@@ -444,6 +456,8 @@
 ;;;_ , Mode line
 (column-number-mode 1)
 (display-time-mode 1)
+;; Hide the `Git:branch` line that's often inaccurate with magit
+(setq vc-handled-backends (delq 'Git vc-handled-backends))
 
 ;; No startup screen
 (setq inhibit-startup-screen t)
@@ -485,6 +499,9 @@
 ;; stop asking about loading files unless they're 1GB or bigger
 (setq large-file-warning-threshold (* 1024 1024 1024))
 
+;; Treat .mjs files as JavaScript
+(add-to-list 'auto-mode-alist '("\\.mjs\\'" . javascript-mode))
+
 ;;;_. Local configuration
 
 ;; Anything specific to a machine should be in site-lisp/local-config
@@ -513,10 +530,10 @@
 
   ;; Embiggening again is handled by the terminal when non-graphical
   (cond
+   ((find-font (font-spec :name "JetBrains Mono"))
+    (set-frame-font "JetBrains Mono 14"))
    ((find-font (font-spec :name "Menlo"))
-    (set-frame-font "Menlo 14"))
-   ((find-font (font-spec :name "DejaVu Sans Mono"))
-    (set-frame-font "DejaVu Sans Mono 14")))
+    (set-frame-font "Menlo 14")))
 
   ;; No accidental minimizing
   (unbind-key "C-x C-z")
@@ -530,34 +547,40 @@
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
-   (vector "#839496" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"))
- '(beacon-color "#dc322f")
+   (vector "#839496" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#fdf6e3"))
+ '(beacon-color "#d33682")
  '(cryptol-command "/opt/cryptol/bin/cryptol")
- '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
+ '(custom-enabled-themes '(sanityinc-solarized-dark))
  '(custom-safe-themes
-   (quote
-    ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+   '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
  '(fci-rule-color "#073642")
- '(frame-background-mode (quote dark))
+ '(flycheck-checker-error-threshold 1024)
+ '(frame-background-mode 'dark)
+ '(global-emojify-mode t)
+ '(lsp-file-watch-threshold 10000)
+ '(lsp-go-gopls-server-path "~/go/bin/gopls")
+ '(lsp-gopls-server-path "~/go/bin/gopls")
+ '(lsp-keymap-prefix "C-S-l")
  '(lsp-prefer-flymake nil)
- '(magit-commit-arguments (quote ("--gpg-sign=2A91B421C62B535C")))
+ '(lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
+ '(lsp-rust-analyzer-import-merge-behaviour "last")
+ '(lsp-rust-analyzer-proc-macro-enable t)
+ '(lsp-rust-server 'rust-analyzer)
+ '(lsp-rust-unstable-features t)
+ '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
  '(package-selected-packages
-   (quote
-    (eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package)))
+   '(csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
+ '(require-final-newline t)
+ '(rust-format-goto-problem nil)
  '(safe-local-variable-values
-   (quote
-    ((eval c-set-offset
-           (quote innamespace)
-           0)
+   '((eval c-set-offset 'innamespace 0)
      (eval when
-           (fboundp
-            (quote c-toggle-comment-style))
-           (c-toggle-comment-style 1)))))
+           (fboundp 'c-toggle-comment-style)
+           (c-toggle-comment-style 1))))
  '(saw-script-command "/opt/saw/bin/saw")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#dc322f")
+   '((20 . "#dc322f")
      (40 . "#cb4b16")
      (60 . "#b58900")
      (80 . "#859900")
@@ -574,7 +597,7 @@
      (300 . "#d33682")
      (320 . "#6c71c4")
      (340 . "#dc322f")
-     (360 . "#cb4b16"))))
+     (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -582,6 +605,15 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; Run rustfmt on the active region
+(defun rustfmt-region (&optional b e) 
+  (interactive "r")
+  (call-process-region b e "rustfmt" t t))
+
+(defun int-to-hex (&optional b e)
+  (interactive "r")
+  (shell-command-on-region b e "python3 -c \"import sys;[sys.stdout.write(hex(int(line))) for line in sys.stdin]\"" t t))
 
 ;; Local Variables:
 ;;   mode: emacs-lisp

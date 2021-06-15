@@ -118,6 +118,9 @@
 ;;;_ , flycheck-haskell
 (use-package flycheck-haskell :ensure t)
 
+;;;_ , groovy-mode
+(use-package groovy-mode :ensure t :commands groovy-mode)
+
 ;;;_ , haskell-mode
 (use-package haskell-mode
   :ensure t

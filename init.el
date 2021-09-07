@@ -224,9 +224,10 @@
   :config
   (progn
     (setq magit-last-seen-setup-instructions "1.4.0")))
-(use-package magit-delta
-  :ensure t
-  :hook (magit-mode . magit-delta-mode))
+;; Too slow for now on big diffs
+;; (use-package magit-delta
+;;   :ensure t
+;;   :hook (magit-mode . magit-delta-mode))
 (use-package magit-todos :ensure t)
 
 ;;;_ , markdown-mode

@@ -77,6 +77,11 @@
   (bind-key "C-c C-f" 'clang-format-buffer c-mode-map))
 (add-hook 'c-initialization-hook 'my-c-initialization-hook)
 
+(defun my-c-mode-hook ()
+  (setq indent-tabs-mode t)
+  (setq c-basic-offset 8))
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+
 ;;;_ , cargo
 (use-package cargo
   :hook (rust-mode . cargo-minor-mode)

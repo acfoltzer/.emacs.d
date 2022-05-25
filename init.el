@@ -550,9 +550,9 @@
   ;; Embiggening again is handled by the terminal when non-graphical
   (cond
    ((find-font (font-spec :name "JetBrains Mono"))
-    (set-frame-font "JetBrains Mono 14"))
+    (set-frame-font "JetBrains Mono 18"))
    ((find-font (font-spec :name "Menlo"))
-    (set-frame-font "Menlo 14")))
+    (set-frame-font "Menlo 18")))
 
   ;; No accidental minimizing
   (unbind-key "C-x C-z")
@@ -573,6 +573,7 @@
  '(custom-safe-themes
    (quote
     ("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default)))
+ '(emojify-emoji-set "twemoji-v2-22")
  '(fci-rule-color "#073642")
  '(flycheck-checker-error-threshold 1024)
  '(frame-background-mode (quote dark))

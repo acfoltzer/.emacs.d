@@ -593,7 +593,7 @@
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
  '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
-   '(edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
+   '(csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
  '(safe-local-variable-values

@@ -437,6 +437,9 @@
   :ensure t
   :init (unicode-fonts-setup))
 
+;;;_ , vcl-mode
+(use-package vcl-mode :ensure t)
+
 ;;;_ , virtualenvwrapper
 (use-package virtualenvwrapper :ensure t)
 

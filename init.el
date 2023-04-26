@@ -164,8 +164,6 @@
     (setq helm-M-x-fuzzy-match t)
     (setq helm-buffers-fuzzy-matching t)
 
-    (use-package helm-config)
-
     ;; Override basic emacs commands
     (bind-key "M-x"     'helm-M-x)
     (bind-key "C-x C-f" 'helm-find-files)

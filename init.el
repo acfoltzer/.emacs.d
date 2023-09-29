@@ -522,6 +522,9 @@
 ;; Treat .mjs files as JavaScript
 (add-to-list 'auto-mode-alist '("\\.mjs\\'" . javascript-mode))
 
+;; Increase the limit of data for Emacs to read from subprocesses. Useful for large LSP responses.
+(setq read-process-output-max (* 1024 1024))
+
 ;;;_. Local configuration
 
 ;; Anything specific to a machine should be in site-lisp/local-config
@@ -577,6 +580,7 @@
  '(fci-rule-color "#073642")
  '(flycheck-checker-error-threshold 1024)
  '(frame-background-mode 'dark)
+ '(gc-cons-threshold 100000000)
  '(global-emojify-mode t)
  '(lsp-file-watch-threshold 10000)
  '(lsp-go-gopls-server-path "~/go/bin/gopls")
@@ -592,6 +596,7 @@
  '(lsp-rust-server 'rust-analyzer)
  '(lsp-rust-unstable-features t)
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
+ '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
    '(csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))

@@ -583,7 +583,7 @@
  '(gc-cons-threshold 100000000)
  '(global-emojify-mode t)
  '(helm-always-two-windows nil)
- '(helm-split-window-default-side 'other)
+ '(helm-split-window-default-side 'same)
  '(helm-window-prefer-horizontal-split t)
  '(lsp-file-watch-threshold 10000)
  '(lsp-go-gopls-server-path "~/go/bin/gopls")

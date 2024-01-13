@@ -581,6 +581,7 @@
  '(flycheck-checker-error-threshold 1024)
  '(frame-background-mode 'dark)
  '(gc-cons-threshold 100000000)
+ '(global-auto-revert-mode t)
  '(global-emojify-mode t)
  '(helm-always-two-windows nil)
  '(helm-split-window-default-side 'same)

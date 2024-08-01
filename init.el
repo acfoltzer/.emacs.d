@@ -87,6 +87,9 @@
   :hook (rust-mode . cargo-minor-mode)
   :diminish)
 
+;;;_ , cmake-mode
+(use-package cmake-mode :ensure t)
+
 ;;;_ , company
 (use-package company
   :ensure t

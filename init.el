@@ -253,6 +253,11 @@
   :ensure t
   :commands meson-mode)
 
+;;;_ , nix-mode
+(use-package nix-mode
+  :ensure t
+  :mode "\\.nix\\'")
+
 ;;;_ , org
 (use-package org
   :ensure t
@@ -574,6 +579,7 @@
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
    (vector "#839496" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#fdf6e3"))
+ '(auth-source-save-behavior nil)
  '(beacon-color "#d33682")
  '(cryptol-command "/opt/cryptol/bin/cryptol")
  '(custom-enabled-themes '(sanityinc-solarized-dark))
@@ -606,7 +612,7 @@
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
-   '(csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
+   '(nix-mode csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
  '(safe-local-variable-values

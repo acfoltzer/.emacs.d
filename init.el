@@ -438,6 +438,9 @@
 
 (use-package tramp :ensure t)
 
+;;;_ , unfill
+(use-package unfill :ensure t)
+
 ;;;_ , unicode-fonts
 (use-package unicode-fonts
   :ensure t

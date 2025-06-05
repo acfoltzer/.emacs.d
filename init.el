@@ -258,6 +258,18 @@
   :ensure t
   :mode "\\.nix\\'")
 
+;;;_ , obsidian
+(use-package obsidian
+  :ensure t
+  :config
+  (global-obsidian-mode t)
+  (obsidian-backlinks-mode t)
+  :custom
+  ;; location of obsidian vault
+  (obsidian-directory "~/stjude/stjude-obsidian")
+  ;; Default location for new notes from `obsidian-capture'
+  (obsidian-inbox-directory "Inbox"))
+
 ;;;_ , org
 (use-package org
   :ensure t
@@ -587,7 +599,7 @@
  '(cryptol-command "/opt/cryptol/bin/cryptol")
  '(custom-enabled-themes '(sanityinc-solarized-dark))
  '(custom-safe-themes
-   '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
+   '("48d34b6afe72407ca494387c8bea495bb2deee96bd88516f302db1f11e1810a1" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
  '(emojify-emoji-set "twemoji-v2-22")
  '(fci-rule-color "#073642")
  '(flycheck-checker-error-threshold 1024)
@@ -615,7 +627,7 @@
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
-   '(nix-mode csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
+   '(obsidian nix-mode csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
  '(safe-local-variable-values

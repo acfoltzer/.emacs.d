@@ -427,14 +427,7 @@
 (use-package color-theme-sanityinc-solarized
   :ensure t
   :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
-  :if (display-graphic-p)
-  :init
-  (progn
-    (setq custom-enabled-themes '(sanityinc-solarized-dark))
-    (setq custom-safe-themes
-	  '("4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
-	    "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328"
-	    default))))
+  :if (display-graphic-p))
 
 ;;;_ , structured-haskell-mode
 ;; (use-package shm
@@ -571,8 +564,6 @@
   (menu-bar-mode -1)
   ;; No scrollbar
   (scroll-bar-mode -1)
-
-  (color-theme-sanityinc-solarized-dark)
 
   ;; Embiggening again is handled by the terminal when non-graphical
   (cond

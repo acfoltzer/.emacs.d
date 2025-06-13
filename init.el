@@ -45,7 +45,7 @@
 (unbind-key "C-x o")
 
 ;; I never want to kill a buffer that's not the current one
-(bind-key "C-x k" 'kill-this-buffer)
+(bind-key "C-x k" 'kill-current-buffer)
 
 ;; Unbind for helm prefix later
 (unbind-key "C-x h")
@@ -264,11 +264,8 @@
   :config
   (global-obsidian-mode t)
   (obsidian-backlinks-mode t)
-  :custom
-  ;; location of obsidian vault
-  (obsidian-directory "~/stjude/stjude-obsidian")
-  ;; Default location for new notes from `obsidian-capture'
-  (obsidian-inbox-directory "Inbox"))
+  ;; customize obsidian directories in `site-lisp` local config
+  )
 
 ;;;_ , org
 (use-package org
@@ -590,7 +587,9 @@
  '(cryptol-command "/opt/cryptol/bin/cryptol")
  '(custom-enabled-themes '(sanityinc-solarized-dark))
  '(custom-safe-themes
-   '("48d34b6afe72407ca494387c8bea495bb2deee96bd88516f302db1f11e1810a1" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
+   '("48d34b6afe72407ca494387c8bea495bb2deee96bd88516f302db1f11e1810a1"
+     "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
+     "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
  '(emojify-emoji-set "twemoji-v2-22")
  '(fci-rule-color "#073642")
  '(flycheck-checker-error-threshold 1024)
@@ -603,7 +602,6 @@
  '(helm-window-prefer-horizontal-split t)
  '(lsp-file-watch-threshold 10000)
  '(lsp-go-gopls-server-path "~/go/bin/gopls")
- '(lsp-gopls-server-path "~/go/bin/gopls")
  '(lsp-keymap-prefix "C-S-l")
  '(lsp-prefer-flymake nil)
  '(lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
@@ -618,35 +616,23 @@
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
-   '(obsidian nix-mode csv-mode edit-indirect mermaid-mode magit-delta csv forge graphviz-dot-mode command-log-mode unfill crontab-mode company-lsp graphql-mode go-mode eglot docker-tramp tramp yasnippet tuareg emojify groovy-mode lsp-mode lsp-ui editorconfig dockerfile-mode cmake-mode vcl-mode clang-format flycheck-rust typescript-mode yaml-mode virtualenvwrapper unicode-fonts color-theme-sanityinc-solarized racer cargo rust-mode purescript-mode meson-mode markdown-mode magit-todos magit helm-swoop helm-projectile helm-idris helm-ag helm-descbinds helm flycheck-haskell exec-path-from-shell elm-mode cryptol-mode company auctex-latexmk auctex diminish use-package))
+   '(auctex-latexmk cmake-mode color-theme-sanityinc-solarized company cryptol-mode diminish
+                    edit-indirect elm-mode emojify exec-path-from-shell flycheck-haskell groovy-mode
+                    helm-ag helm-descbinds helm-idris helm-projectile helm-swoop lsp-ui magit-todos
+                    meson-mode nix-mode obsidian purescript-mode racer unfill unicode-fonts vcl-mode
+                    virtualenvwrapper yaml-mode yasnippet))
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
  '(safe-local-variable-values
    '((eval c-set-offset 'innamespace 0)
-     (eval when
-           (fboundp 'c-toggle-comment-style)
-           (c-toggle-comment-style 1))))
+     (eval when (fboundp 'c-toggle-comment-style) (c-toggle-comment-style 1))))
  '(saw-script-command "/opt/saw/bin/saw")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
-   '((20 . "#dc322f")
-     (40 . "#cb4b16")
-     (60 . "#b58900")
-     (80 . "#859900")
-     (100 . "#2aa198")
-     (120 . "#268bd2")
-     (140 . "#d33682")
-     (160 . "#6c71c4")
-     (180 . "#dc322f")
-     (200 . "#cb4b16")
-     (220 . "#b58900")
-     (240 . "#859900")
-     (260 . "#2aa198")
-     (280 . "#268bd2")
-     (300 . "#d33682")
-     (320 . "#6c71c4")
-     (340 . "#dc322f")
-     (360 . "#cb4b16")))
+   '((20 . "#dc322f") (40 . "#cb4b16") (60 . "#b58900") (80 . "#859900") (100 . "#2aa198")
+     (120 . "#268bd2") (140 . "#d33682") (160 . "#6c71c4") (180 . "#dc322f") (200 . "#cb4b16")
+     (220 . "#b58900") (240 . "#859900") (260 . "#2aa198") (280 . "#268bd2") (300 . "#d33682")
+     (320 . "#6c71c4") (340 . "#dc322f") (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -82,11 +82,6 @@
   (setq c-basic-offset 8))
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 
-;;;_ , cargo
-(use-package cargo
-  :hook (rust-mode . cargo-minor-mode)
-  :diminish)
-
 ;;;_ , cmake-mode
 (use-package cmake-mode :ensure t)
 

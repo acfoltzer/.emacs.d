@@ -300,6 +300,8 @@
     (setq org-refile-use-cache t)
     (setq org-reverse-note-order t)))
 
+;;;_ , prog-mode
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 ;;;_ , projectile
 (use-package projectile

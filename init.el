@@ -190,7 +190,6 @@
     (add-hook 'after-init-hook 'my-helm-init-hook)
 
     ;; Other helm packages
-    (use-package helm-ag :ensure t)
     (use-package helm-idris :ensure t)
     (use-package helm-projectile :ensure t)
     (use-package helm-swoop :ensure t))
@@ -201,7 +200,8 @@
     ;; that completion is more like a tab-completing shell
     (bind-key "<tab>"   'helm-execute-persistent-action helm-map)
     (bind-key "C-i"     'helm-execute-persistent-action helm-map)
-    (bind-key "C-z"     'helm-select-action helm-map)))
+    (bind-key "C-z"     'helm-select-action helm-map)
+    (bind-key "C-l"     'helm-grep-run-ag-grep-parent-directory helm-map)))
 
 
 ;;;_ , idris-mode
@@ -595,6 +595,8 @@
  '(global-auto-revert-mode t)
  '(global-emojify-mode t)
  '(helm-always-two-windows nil)
+ '(helm-grep-file-path-style 'absolute)
+ '(helm-projectile-set-input-automatically nil)
  '(helm-split-window-default-side 'same)
  '(helm-window-prefer-horizontal-split t)
  '(lsp-file-watch-threshold 10000)

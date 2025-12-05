@@ -451,8 +451,12 @@
 ;;;_ , virtualenvwrapper
 (use-package virtualenvwrapper :ensure t)
 
+;;;_ , wgrep
+(use-package wgrep :ensure t)
+
 ;;;_ , whitespace
 (use-package whitespace
+  :ensure t
   :diminish (global-whitespace-mode
              whitespace-mode
              whitespace-newline-mode)
@@ -595,7 +599,7 @@
  '(global-auto-revert-mode t)
  '(global-emojify-mode t)
  '(helm-always-two-windows nil)
- '(helm-grep-file-path-style 'absolute)
+ '(helm-grep-file-path-style 'relative)
  '(helm-projectile-set-input-automatically nil)
  '(helm-split-window-default-side 'same)
  '(helm-window-prefer-horizontal-split t)
@@ -609,6 +613,7 @@
  '(lsp-rust-analyzer-import-granularity "module")
  '(lsp-rust-analyzer-import-merge-behaviour "last")
  '(lsp-rust-analyzer-proc-macro-enable t)
+ '(lsp-rust-cfg-test t)
  '(lsp-rust-server 'rust-analyzer)
  '(lsp-rust-unstable-features t)
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
@@ -623,7 +628,7 @@
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
  '(safe-local-variable-values
-   '((eval c-set-offset 'innamespace 0)
+   '((lsp-rust-all-features . t) (eval c-set-offset 'innamespace 0)
      (eval when (fboundp 'c-toggle-comment-style) (c-toggle-comment-style 1))))
  '(saw-script-command "/opt/saw/bin/saw")
  '(vc-annotate-background nil)

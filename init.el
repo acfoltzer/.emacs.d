@@ -145,7 +145,7 @@
     (setq haskell-process-suggest-add-package nil)
 
     ;; automatically choose cabal repl, stack ghci, etc
-    (setq haskell-process-type 'cabal-new-repl)
+    (setq haskell-process-type 'cabal-repl)
 
     ;; only run hasktags if it's available on the system
     (when (executable-find "hasktags")
@@ -212,7 +212,8 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :hook ((rust-mode) . lsp)
+  :hook ((rust-mode . lsp)
+         (haskell-mode . lsp))
   :bind (:map lsp-command-map
               ("C-S-l" . lsp-keymap-prefix)))
 

@@ -1,4 +1,5 @@
 /.cask/
+/forge-database.sqlite
 /projectile.cache
 /projectile-bookmarks.eld
 /helm-adaptive-history

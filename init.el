@@ -33,7 +33,10 @@
                         (executable-find "/usr/local/bin/gls"))))
     (if (and ls-command (file-exists-p ls-command))
         (setq insert-directory-program ls-command)
-      (message "Note: this Mac doesn't have an ls that supports --dired"))))
+      (message "Note: this Mac doesn't have an ls that supports --dired")))
+  (with-eval-after-load 'auth-source
+    ;; There's also 'macos-keychain-generic, but haven't needed it yet
+    (add-to-list 'auth-sources 'macos-keychain-internet)))
 
 ;;;_. Keybindings
 
@@ -129,6 +132,11 @@
 
 ;;;_ , flycheck-haskell
 (use-package flycheck-haskell :ensure t)
+
+;;;_ , forge
+(use-package forge
+  :ensure t
+  :after magit)
 
 ;;;_ , groovy-mode
 (use-package groovy-mode :ensure t :commands groovy-mode)
@@ -689,9 +697,3 @@
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-
-;; Local Variables:
-;;   mode: emacs-lisp
-;;   mode: allout
-;;   outline-regexp: "^;;;_\\([,. ]+\\)"
-;; End:

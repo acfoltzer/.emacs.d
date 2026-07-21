@@ -3,9 +3,9 @@
 ;;;_ , Get MELPA
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
-             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
@@ -17,6 +17,10 @@
       (package-refresh-contents)
       (package-install 'use-package))
     (require 'use-package)))
+;; Automatically :ensure each use-package.
+(setq use-package-always-ensure t)
+;; Default value for :pin in each use-package.
+(setq use-package-always-pin "melpa-stable")
 (use-package diminish :ensure t)
 (require 'bind-key)
 
@@ -109,12 +113,14 @@
 (use-package elm-mode :ensure t)
 
 ;;;_ , emojify-mode
-(use-package emojify
-  :ensure t
-  :config
-  (progn
-    (global-emojify-mode)
-    (global-emojify-mode-line-mode)))
+;;;
+;;; NOTE ACF 2026-01-29: this mode has gotten crashy and doesn't seem to be maintained. disabling for now :disappointed:
+;; (use-package emojify
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (global-emojify-mode)
+;;     (global-emojify-mode-line-mode)))
 
 ;;;_ , exec-path-from-shell
 (use-package exec-path-from-shell
@@ -177,8 +183,6 @@
 
     (bind-key "C-h b" 'helm-descbinds)
 
-    (use-package helm-adaptive)
-
     ;; For some reason, the :diminish feature of use-package doesn't
     ;; do the trick with helm-mode, so we just diminish it explicitly
     ;; after initializing
@@ -190,9 +194,7 @@
     (add-hook 'after-init-hook 'my-helm-init-hook)
 
     ;; Other helm packages
-    (use-package helm-idris :ensure t)
-    (use-package helm-projectile :ensure t)
-    (use-package helm-swoop :ensure t))
+    (use-package helm-projectile :ensure t))
 
   :config
   (progn
@@ -210,10 +212,12 @@
 
 ;;;_ , lsp
 (use-package lsp-mode
+  :pin melpa
   :ensure t
   :commands lsp
   :hook ((rust-mode . lsp)
          (haskell-mode . lsp))
+  :init (setenv "RUST_BACKTRACE" "1")
   :bind (:map lsp-command-map
               ("C-S-l" . lsp-keymap-prefix)))
 
@@ -254,14 +258,15 @@
   :ensure t
   :mode "\\.nix\\'")
 
-;;;_ , obsidian
-(use-package obsidian
-  :ensure t
-  :config
-  (global-obsidian-mode t)
-  (obsidian-backlinks-mode t)
-  ;; customize obsidian directories in `site-lisp` local config
-  )
+;; Disabled for now while I figure out whether Obsidian is something to adopt
+;; ;;;_ , obsidian
+;; (use-package obsidian
+;;   :ensure t
+;;   :config
+;;   (global-obsidian-mode t)
+;;   (obsidian-backlinks-mode t)
+;;   ;; customize obsidian directories in `site-lisp` local config
+;;   )
 
 ;;;_ , org
 (use-package org
@@ -283,21 +288,21 @@
              ((agenda "" nil)
               (tags-todo "+CATEGORY=\"Unscheduled\"" nil))
              nil)))
-    (setq org-agenda-files (quote ("~/acfoltzer@fastly.com/org/tasks.org.txt")))
-    (setq org-agenda-ndays 7)
-    (setq org-agenda-skip-scheduled-if-done t)
-    (setq org-capture-templates
-          (quote
-           (("n" "Add new note" entry
-             (file "~/acfoltzer@fastly.com/org/notes.org.txt")
-             "* %?
-  Added: %u")
-            ("t" "Add new task" entry
-             (file+headline "~/acfoltzer@fastly.com/org/tasks.org.txt" "Unscheduled")
-             "* TODO %?
-  Added: %u"))))
-    (setq org-default-notes-file "~/acfoltzer@fastly.com/org/notes.org.txt")
-    (setq org-directory "~/acfoltzer@fastly.com/org")
+  ;;   (setq org-agenda-files (quote ("~/acfoltzer@fastly.com/org/tasks.org.txt")))
+  ;;   (setq org-agenda-ndays 7)
+  ;;   (setq org-agenda-skip-scheduled-if-done t)
+  ;;   (setq org-capture-templates
+  ;;         (quote
+  ;;          (("n" "Add new note" entry
+  ;;            (file "~/acfoltzer@fastly.com/org/notes.org.txt")
+  ;;            "* %?
+  ;; Added: %u")
+  ;;           ("t" "Add new task" entry
+  ;;            (file+headline "~/acfoltzer@fastly.com/org/tasks.org.txt" "Unscheduled")
+  ;;            "* TODO %?
+  ;; Added: %u"))))
+  ;;   (setq org-default-notes-file "~/acfoltzer@fastly.com/org/notes.org.txt")
+  ;;   (setq org-directory "~/acfoltzer@fastly.com/org")
     (setq org-refile-use-cache t)
     (setq org-reverse-note-order t)))
 
@@ -328,13 +333,6 @@
   (progn
     (bind-key "C-c p" 'projectile-command-map projectile-mode-map)
     (bind-key "s s" 'helm-projectile-ag projectile-command-map)))
-
-;;;_ , purescript
-(use-package purescript-mode
-  :ensure t
-  :init
-  (progn
-    (add-hook 'purescript-mode-hook '(turn-on-purescript-indentation))))
 
 ;;;_ , python
 (use-package python-mode
@@ -610,26 +608,37 @@
  '(lsp-prefer-flymake nil)
  '(lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
  '(lsp-rust-analyzer-cargo-run-build-scripts t)
+ '(lsp-rust-analyzer-cargo-target-dir "target/emacs-rust-analyzer")
  '(lsp-rust-analyzer-import-enforce-granularity t)
  '(lsp-rust-analyzer-import-granularity "module")
  '(lsp-rust-analyzer-import-merge-behaviour "last")
  '(lsp-rust-analyzer-proc-macro-enable t)
  '(lsp-rust-cfg-test t)
  '(lsp-rust-server 'rust-analyzer)
+ '(lsp-rust-target-dir "target/emacs-rust-lsp")
  '(lsp-rust-unstable-features t)
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
+ '(magit-delete-by-moving-to-trash nil)
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
- '(mermaid-mmdc-location "/home/acfoltzer/bin/mmdc/node_modules/.bin/mmdc")
  '(package-selected-packages
    '(auctex-latexmk cmake-mode color-theme-sanityinc-solarized company cryptol-mode diminish
-                    edit-indirect elm-mode emojify exec-path-from-shell flycheck-haskell groovy-mode
-                    helm-ag helm-descbinds helm-idris helm-projectile helm-swoop lsp-ui magit-todos
-                    meson-mode nix-mode obsidian purescript-mode racer unfill unicode-fonts vcl-mode
-                    virtualenvwrapper yaml-mode yasnippet))
+                    edit-indirect elm-mode exec-path-from-shell flycheck-haskell groovy-mode
+                    helm-descbinds helm-projectile idris-mode lsp-ui magit-todos meson-mode nix-mode
+                    obsidian prettier-js python-mode racer unfill unicode-fonts vcl-mode
+                    virtualenvwrapper wgrep yaml-mode yasnippet))
+ '(prettier-js-use-modules-bin t)
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
+ '(rust-rustfmt-switches '("--edition" "2024"))
+ '(safe-local-variable-directories
+   '("/Users/adam.foltzer/src/gemini-sandbox-x-platform/"
+     "/Users/adam.foltzer/src/x-platform_gemini-makes-some-tests/"
+     "/Users/adam.foltzer/src/x-platform/"))
  '(safe-local-variable-values
-   '((lsp-rust-all-features . t) (eval c-set-offset 'innamespace 0)
+   '((rust-format-on-save . t) (prettier-js-use-modules-bin . t)
+     (lsp-rust-analyzer-cargo-target-dir . "target/emacs-lsp-rust-analyzer") (lsp-rust-cfg-test . t)
+     (rust-rustfmt-switches quote ("--edition" "2024")) (prettier-js-args "--parser" "typescript")
+     (lsp-rust-all-features . t) (eval c-set-offset 'innamespace 0)
      (eval when (fboundp 'c-toggle-comment-style) (c-toggle-comment-style 1))))
  '(saw-script-command "/opt/saw/bin/saw")
  '(vc-annotate-background nil)
@@ -651,9 +660,35 @@
   (interactive "r")
   (call-process-region b e "rustfmt" t t))
 
+;; Reformat ints in hex
 (defun int-to-hex (&optional b e)
   (interactive "r")
   (shell-command-on-region b e "python3 -c \"import sys;[sys.stdout.write(hex(int(line))) for line in sys.stdin]\"" t t))
+
+;; Render ANSI colors in region
+(defun display-ansi-colors ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+;; Populate tree-sitter with info about where to install grammars (list from
+;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter)
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
 
 ;; Local Variables:
 ;;   mode: emacs-lisp

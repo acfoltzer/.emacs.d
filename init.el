@@ -1,4 +1,9 @@
+;;; -*- lexical-binding: t -*-
+
 ;;;_. Initialization
+
+;; This has to be set early in the load to cover compile and runtime for lsp-mode
+(setenv "LSP_USE_PLISTS" "true")
 
 ;;;_ , Get MELPA
 (require 'package)
@@ -6,8 +11,15 @@
              '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("org" . "https://orgmode.org/elpa/") t)
+;; `use-package` is set up to pin to melpa-stable, but if we don't order the archives like this the
+;; dependencies of the packages might resolve to newer versions in other archives
+(setq package-archive-priorities
+      '(("melpa-stable" . 10)
+        ("gnu" . 5)
+        ("nongnu" . 5)
+        ("melpa" . 5)))
+;; Make sure packages can upgrade built-ins they depend upon
+(setq package-install-upgrade-built-in t)
 (package-initialize)
 
 ;;;_ , Bootstrap use-package
@@ -218,13 +230,18 @@
 (use-package idris-mode
   :ensure t)
 
+;;;_ , jira
+(use-package jira
+  :ensure t
+  :commands (jira-issues))
+
 ;;;_ , lsp
 (use-package lsp-mode
   :pin melpa
   :ensure t
   :commands lsp
-  :hook ((rust-mode . lsp)
-         (haskell-mode . lsp))
+  :hook ((rust-mode . lsp-deferred)
+         (haskell-mode . lsp-deferred))
   :init (setenv "RUST_BACKTRACE" "1")
   :bind (:map lsp-command-map
               ("C-S-l" . lsp-keymap-prefix)))
@@ -325,7 +342,6 @@
   :init
   (progn
     (projectile-mode 1)
-    (setq projectile-completion-system 'helm)
     (setq projectile-enable-caching t))
 
   :config
@@ -400,22 +416,19 @@
   :ensure t
   :commands rust-mode)
 
-(use-package racer
-  :ensure t
-  :diminish
-  :bind (:map company-mode-map ("TAB" . company-indent-or-complete-common))
-  :init
-  (progn
-    ;; (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode)
-    (setq company-tooltip-align-annotations t)))
-
 ;;;_ , scheme
 (use-package scheme
   :init
   (progn
     (setq scheme-program-name "petite")))
+
+;;;_ , server
+;; So `emacsclient -n FILE` can open files in this session from the CLI
+(use-package server
+  :if (display-graphic-p)
+  :config
+  (unless (server-running-p)
+    (server-start)))
 
 ;; ;;;_ , smart-tabs
 ;; (use-package smart-tabs-mode
@@ -453,7 +466,9 @@
   :init (unicode-fonts-setup))
 
 ;;;_ , vcl-mode
-(use-package vcl-mode :ensure t)
+(use-package vcl-mode
+  :ensure t
+  :pin gnu)
 
 ;;;_ , virtualenvwrapper
 (use-package virtualenvwrapper :ensure t)
@@ -495,8 +510,6 @@
 ;;;_. Customize
 
 ;;;_ , Mode line
-(column-number-mode 1)
-(display-time-mode 1)
 ;; Hide the `Git:branch` line that's often inaccurate with magit
 (setq vc-handled-backends (delq 'Git vc-handled-backends))
 
@@ -525,14 +538,11 @@
 (c-set-offset 'namespace-open  0 t)
 (c-set-offset 'namespace-close 0 t)
 
-;; Don't split horizontally when making new windows
-(setq split-width-threshold 9999)
+;; Prefer side-by-side window splits over stacked ones. TODO ACF 2026-08-19: Emacs 31 supposedly has
+;; a new setting that governs this behavior more directly. Adopt it when ready.
+(setq split-height-threshold nil)
+(setq split-width-threshold 160)
 
-;; Automatically save desktop
-(desktop-save-mode 1)
-
-;; Wrap to column 100
-(setq-default fill-column 100)
 
 ;; no more yes-or-no
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -592,14 +602,21 @@
    (vector "#839496" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#fdf6e3"))
  '(auth-source-save-behavior nil)
  '(beacon-color "#d33682")
+ '(column-number-mode t)
  '(cryptol-command "/opt/cryptol/bin/cryptol")
  '(custom-enabled-themes '(sanityinc-solarized-dark))
  '(custom-safe-themes
    '("48d34b6afe72407ca494387c8bea495bb2deee96bd88516f302db1f11e1810a1"
      "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
      "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
+ '(desktop-restore-eager 16)
+ '(desktop-save-mode t)
+ '(display-time-default-load-average nil)
+ '(display-time-format "%Y-%m-%d %H:%M")
+ '(display-time-mode t)
  '(emojify-emoji-set "twemoji-v2-22")
  '(fci-rule-color "#073642")
+ '(fill-column 100)
  '(flycheck-checker-error-threshold 1024)
  '(frame-background-mode 'dark)
  '(gc-cons-threshold 100000000)
@@ -608,7 +625,7 @@
  '(helm-always-two-windows nil)
  '(helm-grep-file-path-style 'relative)
  '(helm-projectile-set-input-automatically nil)
- '(helm-split-window-default-side 'same)
+ '(helm-split-window-default-side 'right)
  '(helm-window-prefer-horizontal-split t)
  '(lsp-file-watch-threshold 10000)
  '(lsp-go-gopls-server-path "~/go/bin/gopls")
@@ -628,12 +645,9 @@
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
  '(magit-delete-by-moving-to-trash nil)
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
- '(package-selected-packages
-   '(auctex-latexmk cmake-mode color-theme-sanityinc-solarized company cryptol-mode diminish
-                    edit-indirect elm-mode exec-path-from-shell flycheck-haskell groovy-mode
-                    helm-descbinds helm-projectile idris-mode lsp-ui magit-todos meson-mode nix-mode
-                    obsidian prettier-js python-mode racer unfill unicode-fonts vcl-mode
-                    virtualenvwrapper wgrep yaml-mode yasnippet))
+ '(package-archive-priorities
+   '(("melpa-stable" . 10) ("gnu" . 5) ("nongnu" . 5) ("melpa" . 5)))
+ '(package-selected-packages nil)
  '(prettier-js-use-modules-bin t)
  '(require-final-newline t)
  '(rust-format-goto-problem nil)
@@ -655,7 +669,8 @@
      (120 . "#268bd2") (140 . "#d33682") (160 . "#6c71c4") (180 . "#dc322f") (200 . "#cb4b16")
      (220 . "#b58900") (240 . "#859900") (260 . "#2aa198") (280 . "#268bd2") (300 . "#d33682")
      (320 . "#6c71c4") (340 . "#dc322f") (360 . "#cb4b16")))
- '(vc-annotate-very-old-color nil))
+ '(vc-annotate-very-old-color nil)
+ '(whitespace-line-column nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

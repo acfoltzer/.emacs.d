@@ -14,10 +14,10 @@
 ;; `use-package` is set up to pin to melpa-stable, but if we don't order the archives like this the
 ;; dependencies of the packages might resolve to newer versions in other archives
 (setq package-archive-priorities
-      '(("melpa-stable" . 10)
+      '(("melpa-stable" . 5)
         ("gnu" . 5)
         ("nongnu" . 5)
-        ("melpa" . 5)))
+        ("melpa" . 10)))
 ;; Make sure packages can upgrade built-ins they depend upon
 (setq package-install-upgrade-built-in t)
 (package-initialize)
@@ -32,7 +32,7 @@
 ;; Automatically :ensure each use-package.
 (setq use-package-always-ensure t)
 ;; Default value for :pin in each use-package.
-(setq use-package-always-pin "melpa-stable")
+(setq use-package-always-pin "melpa")
 (use-package diminish :ensure t)
 (require 'bind-key)
 
@@ -237,7 +237,6 @@
 
 ;;;_ , lsp
 (use-package lsp-mode
-  :pin melpa
   :ensure t
   :commands lsp
   :hook ((rust-mode . lsp-deferred)
@@ -646,7 +645,7 @@
  '(magit-delete-by-moving-to-trash nil)
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
  '(package-archive-priorities
-   '(("melpa-stable" . 10) ("gnu" . 5) ("nongnu" . 5) ("melpa" . 5)))
+   '(("melpa-stable" . 5) ("gnu" . 5) ("nongnu" . 5) ("melpa" . 10)))
  '(package-selected-packages nil)
  '(prettier-js-use-modules-bin t)
  '(require-final-newline t)

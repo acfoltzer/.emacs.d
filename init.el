@@ -242,8 +242,7 @@
   :hook ((rust-mode . lsp-deferred)
          (haskell-mode . lsp-deferred))
   :init (setenv "RUST_BACKTRACE" "1")
-  :bind (:map lsp-command-map
-              ("C-S-l" . lsp-keymap-prefix)))
+  :custom (lsp-keymap-prefix "C-S-l"))
 
 (use-package lsp-ui
   :ensure t
@@ -628,7 +627,6 @@
  '(helm-window-prefer-horizontal-split t)
  '(lsp-file-watch-threshold 10000)
  '(lsp-go-gopls-server-path "~/go/bin/gopls")
- '(lsp-keymap-prefix "C-S-l")
  '(lsp-prefer-flymake nil)
  '(lsp-rust-analyzer-cargo-load-out-dirs-from-check t)
  '(lsp-rust-analyzer-cargo-run-build-scripts t)

@@ -420,6 +420,16 @@
   (progn
     (setq scheme-program-name "petite")))
 
+;;;_ , separedit
+(use-package separedit
+  :ensure t
+  :bind (:map prog-mode-map ("C-c '" . separedit))
+  :custom
+  (separedit-default-mode 'gfm-mode)
+  (separedit-continue-fill-column t)
+  (separedit-remove-trailing-spaces-in-comment t)
+  (separedit-write-file-when-execute-save t))
+
 ;;;_ , server
 ;; So `emacsclient -n FILE` can open files in this session from the CLI
 (use-package server
@@ -578,12 +588,15 @@
   ;; No scrollbar
   (scroll-bar-mode -1)
 
-  ;; Embiggening again is handled by the terminal when non-graphical
-  (cond
-   ((find-font (font-spec :name "JetBrains Mono"))
-    (set-frame-font "JetBrains Mono 18"))
-   ((find-font (font-spec :name "Menlo"))
-    (set-frame-font "Menlo 18")))
+  ;; Mac and Linux seem to render heights differently; using native Wayland (via `emacs-pgtk`) seems
+  ;; to resolve these differences but the performance impact is too annoying for now. These values
+  ;; are roughly similar but probably should just be tweaked per-system.
+  (let ((height (if (eq system-type 'darwin) 160 110)))
+    (cond
+     ((find-font (font-spec :name "JetBrains Mono"))
+      (set-face-attribute 'default nil :family "JetBrains Mono" :height height))
+     ((find-font (font-spec :name "Menlo"))
+      (set-face-attribute 'default nil :family "Menlo" :height height))))
 
   ;; No accidental minimizing
   (unbind-key "C-x C-z")

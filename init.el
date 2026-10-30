@@ -463,7 +463,10 @@
 ;;     (when (executable-find shm-program-name)
 ;;       (add-hook 'haskell-mode-hook 'structured-haskell-mode))))
 
-(use-package tramp :ensure t)
+(use-package tramp
+  :ensure t
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
 
 ;;;_ , unfill
 (use-package unfill :ensure t)
@@ -564,6 +567,14 @@
 ;; Increase the limit of data for Emacs to read from subprocesses. Useful for large LSP responses.
 (setq read-process-output-max (* 1024 1024))
 
+;; No toolbar, menu bar, or scrollbar.
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; Make sure every new frame starts fullscreened
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+
 ;;;_. Local configuration
 
 ;; Anything specific to a machine should be in site-lisp/local-config
@@ -576,18 +587,11 @@
 (when (not (display-graphic-p))
   ;; The solarized theme ends up in the customize variables; disable
   ;; it here in case we're in that situation.
-  (disable-theme 'sanityinc-solarized-dark)
-  )
+  (disable-theme 'sanityinc-solarized-dark))
 
 ;;;_. Graphical-specific
 
 (when (display-graphic-p)
-  ;; No useless toolbar or menu bar
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  ;; No scrollbar
-  (scroll-bar-mode -1)
-
   ;; Mac and Linux seem to render heights differently; using native Wayland (via `emacs-pgtk`) seems
   ;; to resolve these differences but the performance impact is too annoying for now. These values
   ;; are roughly similar but probably should just be tweaked per-system.
@@ -599,8 +603,7 @@
       (set-face-attribute 'default nil :family "Menlo" :height height))))
 
   ;; No accidental minimizing
-  (unbind-key "C-x C-z")
-  )
+  (unbind-key "C-x C-z"))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

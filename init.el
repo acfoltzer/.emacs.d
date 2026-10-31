@@ -239,8 +239,12 @@
 (use-package lsp-mode
   :ensure t
   :commands lsp
-  :hook ((rust-mode . lsp-deferred)
-         (haskell-mode . lsp-deferred))
+  :hook ((haskell-mode . lsp-deferred)
+         (rust-mode . lsp-deferred)
+         (prog-mode . (lambda ()
+                        ;; Disable client-side watchers for TRAMP connections
+                        (when (file-remote-p default-directory)
+                          (setq-local lsp-enable-file-watchers nil)))))
   :init (setenv "RUST_BACKTRACE" "1")
   :custom (lsp-keymap-prefix "C-S-l"))
 
@@ -623,6 +627,7 @@
    '("48d34b6afe72407ca494387c8bea495bb2deee96bd88516f302db1f11e1810a1"
      "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4"
      "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" default))
+ '(desktop-files-not-to-save nil)
  '(desktop-restore-eager 16)
  '(desktop-save-mode t)
  '(display-time-default-load-average nil)

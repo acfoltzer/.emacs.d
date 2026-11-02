@@ -106,6 +106,7 @@
 ;; Integration with the system keyboard from terminal frames (and tmux, and ssh) via OSC 52.
 (use-package clipetty
   :ensure t
+  :diminish clipetty-mode
   :config (global-clipetty-mode 1))
 
 ;;;_ , cmake-mode

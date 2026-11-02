@@ -43,12 +43,24 @@
   (let ((ls-command (or (executable-find "gls")
                         (executable-find "/opt/local/bin/gls")
                         (executable-find "/usr/local/bin/gls"))))
-    (if (and ls-command (file-exists-p ls-command))
+    (if (and ls-command (file-executable-p ls-command))
         (setq insert-directory-program ls-command)
       (message "Note: this Mac doesn't have an ls that supports --dired")))
   (with-eval-after-load 'auth-source
     ;; There's also 'macos-keychain-generic, but haven't needed it yet
     (add-to-list 'auth-sources 'macos-keychain-internet)))
+
+;;;_ , illumos
+
+;; There are almost certainly other places where GNU behavior is expected; this will grow as needed.
+(when (eq system-type 'usg-unix-v)
+  (let ((gnu-bin-dir "/usr/gnu/bin"))
+    (let ((gnu-diff (expand-file-name "diff" gnu-bin-dir)))
+      (when (file-executable-p gnu-diff)
+        (setq diff-command gnu-diff)))
+    (let ((gnu-ls (expand-file-name "ls" gnu-bin-dir)))
+      (when (file-executable-p gnu-ls)
+        (setq insert-directory-program gnu-ls)))))
 
 ;;;_. Keybindings
 

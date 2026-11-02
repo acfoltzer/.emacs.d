@@ -101,6 +101,13 @@
   (setq c-basic-offset 8))
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 
+;;;_ , clipetty
+
+;; Integration with the system keyboard from terminal frames (and tmux, and ssh) via OSC 52.
+(use-package clipetty
+  :ensure t
+  :config (global-clipetty-mode 1))
+
 ;;;_ , cmake-mode
 (use-package cmake-mode :ensure t)
 
@@ -672,6 +679,7 @@
  '(saw-script-command "/opt/saw/bin/saw")
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil)
+ '(tramp-terminal-type "tramp")
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    '((20 . "#dc322f") (40 . "#cb4b16") (60 . "#b58900") (80 . "#859900") (100 . "#2aa198")

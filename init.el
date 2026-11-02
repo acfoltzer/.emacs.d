@@ -581,13 +581,6 @@
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
 (require 'local-config nil t)
 
-;;;_. Terminal-specific
-
-(when (not (display-graphic-p))
-  ;; The solarized theme ends up in the customize variables; disable
-  ;; it here in case we're in that situation.
-  (disable-theme 'sanityinc-solarized-dark))
-
 ;;;_. Graphical-specific
 
 (when (display-graphic-p)
@@ -693,6 +686,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; The solarized theme ends up in the customize variables; disable it in a terminal session. The
+;; `daemonp` carveout is so that starting a server on a GUI system doesn't disable the theme for
+;; later frames; this will probably need to be refined if/when I start using servers on terminal
+;; sessions too.
+(unless (or (daemonp) (display-graphic-p))
+  (disable-theme 'sanityinc-solarized-dark))
 
 ;; Run rustfmt on the active region
 (defun rustfmt-region (&optional b e) 

@@ -687,11 +687,12 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; The solarized theme ends up in the customize variables; disable it in a terminal session. The
-;; `daemonp` carveout is so that starting a server on a GUI system doesn't disable the theme for
-;; later frames; this will probably need to be refined if/when I start using servers on terminal
-;; sessions too.
-(unless (or (daemonp) (display-graphic-p))
+;; The solarized theme ends up in the customize variables; disable it in a terminal session or in a
+;; server daemon that's not built with a GUI toolkit. This is a little brittle, but should be fine
+;; as long as I don't try to do much terminal Emacsing on a GUI system. Fall back to overriding this
+;; in local-config if it gets too annoying.
+(unless (or (display-graphic-p)
+            (and (daemonp) (fboundp 'x-create-frame)))
   (disable-theme 'sanityinc-solarized-dark))
 
 ;; Run rustfmt on the active region

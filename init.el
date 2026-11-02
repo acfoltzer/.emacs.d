@@ -571,11 +571,6 @@
 ;; Increase the limit of data for Emacs to read from subprocesses. Useful for large LSP responses.
 (setq read-process-output-max (* 1024 1024))
 
-;; No toolbar, menu bar, or scrollbar.
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-
 ;; Make sure every new frame starts fullscreened
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
 
@@ -663,6 +658,7 @@
  '(magit-commit-arguments '("--gpg-sign=2A91B421C62B535C"))
  '(magit-delete-by-moving-to-trash nil)
  '(magit-todos-insert-after '(bottom) nil nil "Changed by setter of obsolete option `magit-todos-insert-at'")
+ '(menu-bar-mode nil)
  '(package-archive-priorities
    '(("melpa-stable" . 5) ("gnu" . 5) ("nongnu" . 5) ("melpa" . 10)))
  '(package-selected-packages nil)
@@ -681,6 +677,8 @@
      (lsp-rust-all-features . t) (eval c-set-offset 'innamespace 0)
      (eval when (fboundp 'c-toggle-comment-style) (c-toggle-comment-style 1))))
  '(saw-script-command "/opt/saw/bin/saw")
+ '(scroll-bar-mode nil)
+ '(tool-bar-mode nil)
  '(vc-annotate-background nil)
  '(vc-annotate-color-map
    '((20 . "#dc322f") (40 . "#cb4b16") (60 . "#b58900") (80 . "#859900") (100 . "#2aa198")

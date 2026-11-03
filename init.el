@@ -52,9 +52,15 @@
 
 ;;;_ , illumos
 
-;; There are almost certainly other places where GNU behavior is expected; this will grow as needed.
 (when (eq system-type 'usg-unix-v)
+  ;; Disable features that want a file notification API; illumos's FEN is weird enough that backends
+  ;; for it have been dropped or never added.
+  (setq helm-ff-use-notify nil)
+  (setq auto-revert-use-notify nil)
+  (setq lsp-enable-file-watchers nil)
   (let ((gnu-bin-dir "/usr/gnu/bin"))
+    ;; There are almost certainly other places where GNU behavior is expected; this will grow as
+    ;; needed.
     (let ((gnu-diff (expand-file-name "diff" gnu-bin-dir)))
       (when (file-executable-p gnu-diff)
         (setq diff-command gnu-diff)))

@@ -485,8 +485,7 @@
 ;;;_ , solarized-theme
 (use-package color-theme-sanityinc-solarized
   :ensure t
-  :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light)
-  :if (display-graphic-p))
+  :commands (color-theme-sanityinc-solarized-dark color-theme-sanityinc-solarized-light))
 
 ;;;_ , structured-haskell-mode
 ;; (use-package shm
@@ -713,21 +712,14 @@
      (220 . "#b58900") (240 . "#859900") (260 . "#2aa198") (280 . "#268bd2") (300 . "#d33682")
      (320 . "#6c71c4") (340 . "#dc322f") (360 . "#cb4b16")))
  '(vc-annotate-very-old-color nil)
- '(whitespace-line-column nil))
+ '(whitespace-line-column nil)
+ '(xterm-mouse-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-;; The solarized theme ends up in the customize variables; disable it in a terminal session or in a
-;; server daemon that's not built with a GUI toolkit. This is a little brittle, but should be fine
-;; as long as I don't try to do much terminal Emacsing on a GUI system. Fall back to overriding this
-;; in local-config if it gets too annoying.
-(unless (or (display-graphic-p)
-            (and (daemonp) (fboundp 'x-create-frame)))
-  (disable-theme 'sanityinc-solarized-dark))
 
 ;; Run rustfmt on the active region
 (defun rustfmt-region (&optional b e) 

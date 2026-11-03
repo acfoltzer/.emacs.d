@@ -66,7 +66,10 @@
         (setq diff-command gnu-diff)))
     (let ((gnu-ls (expand-file-name "ls" gnu-bin-dir)))
       (when (file-executable-p gnu-ls)
-        (setq insert-directory-program gnu-ls)))))
+        (setq insert-directory-program gnu-ls)))
+    (let ((gnu-sed (expand-file-name "sed" gnu-bin-dir)))
+      (when (file-executable-p gnu-sed)
+        (setq Man-sed-command gnu-sed)))))
 
 ;;;_. Keybindings
 
@@ -166,7 +169,11 @@
 ;;;_ , exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t
-  :init (exec-path-from-shell-initialize))
+  :config
+  (exec-path-from-shell-initialize)
+  ;; Prevent an empty MANPATH from breaking `M-x man` on illumos
+  (when (equal (getenv "MANPATH") "")
+    (setenv "MANPATH" nil)))
 
 ;;;_ , flycheck-haskell
 (use-package flycheck-haskell :ensure t)
